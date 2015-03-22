@@ -1,0 +1,47 @@
+#define NOTE_C4  262
+#define NOTE_G3  196 //Define buzzer tones
+
+
+int led = 12;
+int melody[] = { NOTE_C4, NOTE_G3 }; // defien melod for buzzer alarm
+int buzzer = 8;
+
+void setup() {
+   pinMode(led, OUTPUT);
+   pinMode(buzzer,OUTPUT);
+   Serial.begin(9600);      // sets the serial port to 9600
+}
+
+void loop() {
+  int val = analogRead(0);   //Obtain values from analog MQ135 reading, AnalogPin(0)
+ 
+  Serial.println(val, DEC);  // prints the value read
+  delay(1500);                        // wait 1s for next reading
+  ///////////////////////
+  
+  if(val > 400){
+    blinkLED(10); // LED blinks with interval 10ms if val is larger than 400
+    tone (8, melody[buzzer],1000); //(pin,frequency)    tone(8, melody[thisNote],noteDuration)
+   
+    
+    
+  }else if(val > 300 && val < 400){
+        // LED blinks with interval 100ms if val is between 200 and 300
+    blinkLED(100);
+  }else if(val < 300 && val > 250){
+    blinkLED(1000);
+  }else{
+        //or else: turn the LED off
+    digitalWrite(led, LOW);
+  }
+}
+//Blink statement
+unsigned int blinkLED(int period){
+  unsigned long time = millis();
+  unsigned int signal;
+  if((time / period) % 2 == 0){
+    digitalWrite(led, HIGH);
+  }else{
+    digitalWrite(led, LOW);
+  }
+}
